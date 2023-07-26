@@ -9,6 +9,7 @@ function App() {
   const [successView, setSuccessView] = useState(false);
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [isTouched, setIsTouched] = useState(false);
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
 
   const features = [
     'Product discovery and building what matters',
@@ -27,11 +28,10 @@ function App() {
   };
 
   const handleSubmit = () => {
+    setIsButtonClicked(true);
     const re = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
     if (re.test(email)) {
       setSuccessView(true);
-    } else {
-      setIsValidEmail(false);
     }
   };
 
@@ -39,6 +39,7 @@ function App() {
     setEmail('');
     setSuccessView(false);
     setIsTouched(false);
+    setIsButtonClicked(false);
   };
 
   if (!successView) {
@@ -58,11 +59,12 @@ function App() {
           </ul>
           <div className='mail-text'>
             <label htmlFor='input'>Email address</label>
-            {!isValidEmail && isTouched && <p>Valid email required</p>}
+            {((!isValidEmail && isTouched) ||
+              (isButtonClicked && email === '')) && <p>Valid email required</p>}
           </div>
           <input
             className={
-              !isValidEmail && isTouched
+              (!isValidEmail && isTouched) || (isButtonClicked && email === '')
                 ? 'email-input__invalid'
                 : 'email-input'
             }
